@@ -529,7 +529,7 @@
                                         </div>
                                     </div>
                                     <div class="col-md-6 col-lg-6 col-sm-12 col-xs-12">
-                                        <div class="form-group" id="file">
+                                        <div class="form-group" id="fileButton">
                                             <div class="form-input">
                                                 UPLOAD YOUR CV:
                                                 <!-- <input type="file" placeholder="Contact No."> -->
@@ -548,6 +548,9 @@
                                     <div class="col-md-12 col-lg-12 col-sm-12 col-xs-12 text-center" >
                                         <div class="form-group mb0">
                                             <button type="submit">Submit</button>
+                                        </div>
+                                        <div>
+                                            <progress value="0" max="100" id="upload" style="-webkit-appearance:none;appearance:none;width:50%">0%</progress>
                                         </div>
                                     </div>
                                 </div>
@@ -661,6 +664,46 @@ Copyright &copy;<script>document.write(new Date().getFullYear());</script> All r
     </footer>
     <!--FOOER AREA END-->
 
+<!---Firebase Initialisation-->
+
+<script src="https://www.gstatic.com/firebasejs/5.5.4/firebase.js"></script>
+<script>
+  // Initialize Firebase
+  var config = {
+    apiKey: "AIzaSyD-DxWbF_xEc45PG0g-byOzviU3vS0HXLQ",
+    authDomain: "wman-12.firebaseapp.com",
+    databaseURL: "https://wman-12.firebaseio.com",
+    projectId: "wman-12",
+    storageBucket: "wman-12.appspot.com",
+    messagingSenderId: "465471242460"
+  };
+  firebase.initializeApp(config);
+
+  var uploader = document.getElementById('upload');
+  var fileButton = document.getElementById('fileButton');
+
+  fileButton.addEventListener('change', function(e){
+      //get file
+        var file = e.target.files[0];
+      //firebasae ref
+        var storageRef = firebase.storage().ref('Resume/'+file.name);
+      // upload file
+       var task = storageRef.put(file);
+      //upload progress bar
+      task.on('state_changed',
+      function progress(snapshot){
+          var percentage = (snapshot.bytesTransferred / snapshot.totalBytes)*100;
+          uploader.value = percentage;
+      },
+      function error(){
+
+      },
+      function complete(){
+
+      }
+      );
+  });
+</script>
 
     <!--====== SCRIPTS JS ======-->
     <script src="assest/js/vendor/jquery-1.12.4.min.js"></script>
@@ -685,9 +728,10 @@ Copyright &copy;<script>document.write(new Date().getFullYear());</script> All r
     <!--===== ACTIVE JS=====-->
     <script src="assest/js/main.js"></script>
 
-    <!--===== MAPS JS=====-->
+    <!--===== MAPS JS=====
     <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBTS_KEDfHXYBslFTI_qPJIybDP3eceE-A&sensor=false"></script>
-    <script src="assest/js/maps.active.js"></script>
+    <script src="assest/js/maps.active.js"></script>-->
+
 </body>
 
 </html>
