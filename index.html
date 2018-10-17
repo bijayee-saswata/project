@@ -515,12 +515,12 @@
                                                 POSITION:
                                                 <select onfocus='this.size=5;' 
                                                 onblur='this.size=1;' 
-                                                onchange='this.size=1; this.blur();' class="form-control" >
-                                                    <option value="0">--Select--</option>
-                                                    <option value="val1">Android developer</option>
-                                                    <option value="val2">dsfdfd</option>
-                                                    <option value="val3">dfsdfdsf</option>
-                                                    <option value="val4">5</option>
+                                                onchange='this.size=1; this.blur();' class="form-control" id="position">
+                                                    <option value="v">--Select--</option>
+                                                    <option value="val">Android developer</option>
+                                                    <option value="valw">dsfdfd</option>
+                                                    <option value="valt">dfsdfdsf</option>
+                                                    <option value="vali">5</option>
                                                     
                                                 </select>
                                             </div>
@@ -682,33 +682,14 @@ Copyright &copy;<script>document.write(new Date().getFullYear());</script> All r
   var database = firebase.database();  
   var uploader = document.getElementById('upload');
   var fileButton = document.getElementById('fileButton');
-  var name = document.getElementById("name").value;
-  var email = document.getElementById("form-email").value;
  
-  //var position = document.getElementById('').value;
-
-  document.getElementById("progressbar").style.display = "none";
-  function dataSubmit(){
-    var name = document.getElementById("name").value;
-    var email = document.getElementById("form-email").value;
-    document.getElementById("progressbar").style.display = "block";
-
-      writeUserData(name,email);
-      function writeUserData( name, email) {
-        database.ref('users/' + name).set({
-            username: name,
-            email: email,
-           
-        });} 
-      document.getElementById("result").innerHTML = "Please Wait..";     
-    }
-
+    
     //File upload
   fileButton.addEventListener('change', function(e){
       //get file
         var file = e.target.files[0];
       //firebasae ref
-        var storageRef = firebase.storage().ref('Resume/'+name);
+        var storageRef = firebase.storage().ref('Resume/'+file.name);
       // upload file
        var task = storageRef.put(file);
       //upload progress bar
@@ -718,14 +699,34 @@ Copyright &copy;<script>document.write(new Date().getFullYear());</script> All r
           uploader.value = percentage;
       },
       function error(){
-
+        document.getElementById("result").innerHTML = "Error.. Please try again.";
       },
       function complete(){
         document.getElementById("result").innerHTML = "Upload Successfull...";
       }
       );
     
-  });
+  });  
+
+  document.getElementById("progressbar").style.display = "none";
+  function dataSubmit(){
+    var name = document.getElementById("name").value;
+    var email = document.getElementById("form-email").value;
+    var position = document.getElementById("position").value;
+    document.getElementById("progressbar").style.display = "block";
+
+      writeUserData(name,email,position);
+      function writeUserData( name, email, position) {
+        database.ref('users/' + name).set({
+            username: name,
+            email: email,
+            position: position,
+           
+        });} 
+   // alert(position);
+      document.getElementById("result").innerHTML = "Please Wait..";     
+    }
+
 </script>
 
     <!--====== SCRIPTS JS ======-->
