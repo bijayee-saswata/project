@@ -491,13 +491,13 @@
                             <h3 class="font28 mb50 xs-mb30 xs-font22 xs-mt20">Any question in mind? Don’t Worry Contact Us.</h3>
                         </div>
                         <div class="contact-form wow fadeIn">
-                            <form action="process.php" id="contact-form" method="post">
+                            <div id="contact-form">
                                 <div class="row">
                                     <div class="col-md-6 col-lg-6 col-sm-12 col-xs-12">
                                         <div class="form-group" id="name-field">
                                             <div class="form-input">
                                                 NAME:
-                                                <input type="text" class="form-control" id="form-name" name="form-name" placeholder="Enter your name.." required>
+                                                <input type="text" class="form-control" id="name" name="form-name" placeholder="Enter your name.." required>
                                             </div>
                                         </div>
                                     </div>
@@ -516,14 +516,12 @@
                                                 <select onfocus='this.size=5;' 
                                                 onblur='this.size=1;' 
                                                 onchange='this.size=1; this.blur();' class="form-control" >
-                                                    <option>--Select--</option>
-                                                    <option>Android developer</option>
-                                                    <option>dsfdfd</option>
-                                                    <option>dfsdfdsf</option>
-                                                    <option>5</option>
-                                                    <option>6</option>
-                                                    <option>7</option>
-                                                    <option>8</option>
+                                                    <option value="0">--Select--</option>
+                                                    <option value="val1">Android developer</option>
+                                                    <option value="val2">dsfdfd</option>
+                                                    <option value="val3">dfsdfdsf</option>
+                                                    <option value="val4">5</option>
+                                                    
                                                 </select>
                                             </div>
                                         </div>
@@ -547,14 +545,15 @@
                                     </div> -->
                                     <div class="col-md-12 col-lg-12 col-sm-12 col-xs-12 text-center" >
                                         <div class="form-group mb0">
-                                            <button type="submit">Submit</button>
+                                            <button type="submit" onclick="dataSubmit()">Submit</button>
                                         </div>
-                                        <div>
+                                        <div  id="progressbar">
                                             <progress value="0" max="100" id="upload" style="-webkit-appearance:none;appearance:none;width:50%">0%</progress>
+                                            <p id="result" style="color:red;"></p>
                                         </div>
                                     </div>
                                 </div>
-                            </form>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -679,14 +678,37 @@ Copyright &copy;<script>document.write(new Date().getFullYear());</script> All r
   };
   firebase.initializeApp(config);
 
+  // Get a reference to the database service
+  var database = firebase.database();  
   var uploader = document.getElementById('upload');
   var fileButton = document.getElementById('fileButton');
+  var name = document.getElementById("name").value;
+  var email = document.getElementById("form-email").value;
+ 
+  //var position = document.getElementById('').value;
 
+  document.getElementById("progressbar").style.display = "none";
+  function dataSubmit(){
+    var name = document.getElementById("name").value;
+    var email = document.getElementById("form-email").value;
+    document.getElementById("progressbar").style.display = "block";
+
+      writeUserData(name,email);
+      function writeUserData( name, email) {
+        database.ref('users/' + name).set({
+            username: name,
+            email: email,
+           
+        });} 
+      document.getElementById("result").innerHTML = "Please Wait..";     
+    }
+
+    //File upload
   fileButton.addEventListener('change', function(e){
       //get file
         var file = e.target.files[0];
       //firebasae ref
-        var storageRef = firebase.storage().ref('Resume/'+file.name);
+        var storageRef = firebase.storage().ref('Resume/'+name);
       // upload file
        var task = storageRef.put(file);
       //upload progress bar
@@ -699,9 +721,10 @@ Copyright &copy;<script>document.write(new Date().getFullYear());</script> All r
 
       },
       function complete(){
-
+        document.getElementById("result").innerHTML = "Upload Successfull...";
       }
       );
+    
   });
 </script>
 
@@ -721,7 +744,7 @@ Copyright &copy;<script>document.write(new Date().getFullYear());</script> All r
     <script src="assest/js/jquery-modal-video.min.js"></script>
     <script src="assest/js/stellarnav.min.js"></script>
     <script src="assest/js/placeholdem.min.js"></script>
-    <script src="assest/js/contact-form.js"></script>
+    <!-- <script src="assest/js/contact-form.js"></script> -->
     <script src="assest/js/jquery.ajaxchimp.js"></script>
     <script src="assest/js/jquery.sticky.js"></script>
 
